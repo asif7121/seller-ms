@@ -1,13 +1,10 @@
-import { registerUser } from "./register";
-import { loginUser } from "./login";
-import { verifyToken } from "./verify-otp";
+import { details } from './sellerDetails';
+
 
 
 
 
 
 export {
-    registerUser,
-    loginUser,
-    verifyToken
+    details,
 }
