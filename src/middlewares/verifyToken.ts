@@ -14,8 +14,7 @@ export const verify_token = async (req: Request, res: Response, next: NextFuncti
 		if (!token) {
 			return res.status(400).json({ error: 'Invalid token' })
 		}
-        const decode = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload
-        console.log(`decode:  ${decode._id}`)
+		const decode = jwt.verify(token, process.env.JWT_SECRET) as JwtPayload
         req.user = decode
 		next()
 	} catch (error) {

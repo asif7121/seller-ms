@@ -6,8 +6,9 @@ import { Request, Response } from "express";
 
 export const getProduct = async (req: Request, res: Response) => {
     try {
+        const {_id} = req.user
         const { productId } = req.query
-        const product = await Product.findById(productId)
+        const product = await Product.findOne({ _id: productId, _seller: _id })
         if (!product) {
             return res.status(404).json({error: 'No Product found..'})
         }
