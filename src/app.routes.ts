@@ -1,7 +1,7 @@
 
 import { verify_token } from "@middlewares/verifyToken";
 import { user_router } from "@modules/auth/user/routes";
-import { discountRouter } from "@modules/discount/routes";
+import { bundleRouter } from "@modules/bundle/routes";
 import { productRoute } from "@modules/product/routes";
 import { Router } from "express";
 
@@ -12,7 +12,7 @@ const router = Router()
 router.use(verify_token)
 router.use('/seller',user_router)
 router.use('/product', productRoute)
-router.use('/discount', discountRouter)
+router.use('/bundle', bundleRouter)
 
 
 

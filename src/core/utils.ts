@@ -1,4 +1,4 @@
-
+import moment from 'moment'
 
 export function generate_random_number(length: number) {
 	let result = ''
@@ -10,4 +10,11 @@ export function generate_random_number(length: number) {
 	return result
 }
 
-
+export const isValidDate = (dateString: string) => {
+	return moment(dateString, 'YYYY-MM-DD', true).isValid()
+}
+// Validate email using regex
+export const isValidEmail = (email: string) => {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+	return emailRegex.test(email)
+}
