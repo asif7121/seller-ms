@@ -2,6 +2,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import { connect_db } from '@core/database'
 import router from './app.routes'
+import { consumeMessages } from 'services/rabbitMQ'
 dotenv.config()
 
 
@@ -17,4 +18,5 @@ app.use('/api/v1',router)
 
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`)
+    consumeMessages()
 })

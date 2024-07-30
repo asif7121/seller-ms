@@ -4,23 +4,17 @@ import { Schema, Document, model } from 'mongoose'
 
 
 interface ISeller extends Document {
-    gstNumber: string
-    busisnessName: string
-    _user: Schema.Types.ObjectId
+   email: string
+    userId: Schema.Types.ObjectId
 }
 
 const sellerSchema: Schema = new Schema({
-    gstNumber: {
+    email: {
         type: String,
         required: true,
     },
-    businessName: {
-        type: String,
-        required: true
-    },
-    _user: {
+    userId: {
         type: Schema.Types.ObjectId,
-        ref: "User"
     }
 }, {
     timestamps: true,
