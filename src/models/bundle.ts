@@ -3,9 +3,10 @@ import { Document, model, Schema } from 'mongoose'
 interface IBundle extends Document {
 	name: string
 	price: number
-	_products: [Schema.Types.ObjectId]
-	_discounts?: [Schema.Types.ObjectId]
-	_seller: Schema.Types.ObjectId
+	discount?: number
+	isDeleted:boolean
+	_products: Schema.Types.ObjectId[]
+	_createdBy: Schema.Types.ObjectId
 }
 
 const bundleSchema: Schema = new Schema(
@@ -24,13 +25,16 @@ const bundleSchema: Schema = new Schema(
 				ref: 'Product',
 			},
 		],
-		_discounts: [
-			{
-				type: Schema.Types.ObjectId,
-				ref: 'Discount',
-			},
-		],
-		_seller: {
+		discount: {
+			type: Number,
+			default: undefined
+		},
+		isDeleted: {
+			type: Boolean,
+			default: false,
+		},
+
+		_createdBy: {
 			type: Schema.Types.ObjectId,
 			ref: 'User',
 		},

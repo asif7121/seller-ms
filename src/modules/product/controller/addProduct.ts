@@ -7,7 +7,7 @@ import { Request, Response } from 'express'
 
 export const addProduct = async (req: Request, res: Response) => {
 	try {
-		const {userId} = req.user
+		const {_id} = req.user
 		const { name, description, mrp, discount, _category , stockAvailable} = req.body 
 		let finalPrice: number = mrp
 		if(discount) finalPrice = mrp - ((mrp * discount) / 100)
@@ -19,7 +19,7 @@ export const addProduct = async (req: Request, res: Response) => {
 			discount,
 			_category,
 			stockAvailable,
-			_createdBy: userId,
+			_createdBy: _id,
 		})
 		return res.status(201).json({ message: 'Product added..', data: product })
 	} catch (error) {
