@@ -1,5 +1,5 @@
 import amqplib from 'amqplib'
-import { createSeller } from './createSeller'
+
 
 const rabbitMqUrl = 'amqp://localhost'
 
@@ -14,7 +14,7 @@ export const consumeMessages = async () => {
 			async(msg:any) => {
 				if (msg !== null) {
 					const message = JSON.parse(msg.content.toString())
-					await createSeller(message)
+					
 					channel.ack(msg)
 				}
 			},

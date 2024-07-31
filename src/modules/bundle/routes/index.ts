@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addBundle, getAllBundle, getBundle, updateBundle } from "@modules/bundle/controller";
+import { addBundle, deleteBundle, getAllBundle, getBundle, updateBundle } from "@modules/bundle/controller";
 
 
 
@@ -12,6 +12,7 @@ router.post('/add-bundle', addBundle)
 router.get('/get-bundle', getBundle)
 router.get('/get-all', getAllBundle)
 router.patch('/update', updateBundle)
+router.patch('/delete', deleteBundle)
 
 
 export const bundleRouter = router
