@@ -1,6 +1,5 @@
 import { Product } from '@models/product'
 import { Request, Response } from 'express'
-import mongoose from 'mongoose'
 
 export const getAllProduct = async (req: Request, res: Response) => {
 	try {
@@ -9,18 +8,16 @@ export const getAllProduct = async (req: Request, res: Response) => {
 		const pageNumber = parseInt(page as string)
 		const limitNumber = parseInt(limit as string)
 
-		const searchFilter = search
-			? {
-				$or: [
-					{ name: { $regex: search, $options: 'i' } },
-					{ 'category.name': { $regex: search, $options: 'i' } },
-				]
-			} : {};
+		// Create the initial match filter
+		const matchFilter: any = { '_createdBy._id': _id, isDeleted: false }
+		if (search) {
+			matchFilter.$or = [
+				{ name: { $regex: search, $options: 'i' } },
+				{ 'category.name': { $regex: search, $options: 'i' } },
+			]
+		}
 
 		const products = await Product.aggregate([
-			{
-				$match: { _createdBy: _id },
-			},
 			{
 				$lookup: {
 					from: 'categories',
@@ -31,7 +28,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
 			},
 			{ $unwind: '$category' },
 			{
-				$match: searchFilter,
+				$match: matchFilter,
 			},
 			{
 				$facet: {
@@ -46,9 +43,9 @@ export const getAllProduct = async (req: Request, res: Response) => {
 								name: 1,
 								price: 1,
 								mrp: 1,
+								discount:1,
 								description: 1,
 								stockAvailable: 1,
-								isActive: 1,
 								category: '$category.name',
 							},
 						},
@@ -57,14 +54,14 @@ export const getAllProduct = async (req: Request, res: Response) => {
 			},
 		])
 
-		const totalItems = products[0].metadata[0] ? products[0].metadata[0].total : 0
-		const paginatedData = products[0].data
+		const totalItems = products[0]?.metadata[0]?.total || 0
+		const paginatedData = products[0]?.data || []
 
 		return res.status(200).json({
 			success: true,
 			page: pageNumber,
 			itemsPerPage: limitNumber,
-			totalItems: totalItems,
+			totalItems,
 			totalPages: Math.ceil(totalItems / limitNumber),
 			data: paginatedData,
 		})

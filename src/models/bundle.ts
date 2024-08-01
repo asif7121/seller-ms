@@ -4,9 +4,14 @@ interface IBundle extends Document {
 	name: string
 	price: number
 	discount?: number
-	isDeleted:boolean
+	isDeleted: boolean
+	isBlocked: boolean
+	_blockedBy: Schema.Types.ObjectId
 	_products: Schema.Types.ObjectId[]
-	_createdBy: Schema.Types.ObjectId
+	_createdBy: {
+		_id: Schema.Types.ObjectId,
+		role: 'seller' | 'admin'
+	}
 }
 
 const bundleSchema: Schema = new Schema(
@@ -33,10 +38,23 @@ const bundleSchema: Schema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		isBlocked: {
+			type: Boolean,
+			default: false,
+		},
+		_blockedBy: {
+			type: Schema.Types.ObjectId,
+			default: undefined
+		},
 
 		_createdBy: {
-			type: Schema.Types.ObjectId,
-			ref: 'User',
+			_id: {
+				type: Schema.Types.ObjectId,
+			},
+			role: {
+				type: String,
+				enum:['seller', 'admin']
+			}
 		},
 	},
 	{ timestamps: true, versionKey: false }

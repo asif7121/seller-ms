@@ -3,13 +3,13 @@ import { Request, Response } from 'express'
 
 export const getAllBundle = async (req: Request, res: Response) => {
 	try {
-		const { _id } = req.user
+		const { _id  } = req.user
 		const { page = 1, limit = 10, search } = req.query
 		const pageNumber = parseInt(page as string)
 		const limitNumber = parseInt(limit as string)
 		const searchFilter = search
-			? { _createdBy: _id, name: { $regex: search, $options: 'i' } }
-			: { _createdBy: _id }
+			? { '_createdBy._id': _id, isDeleted: false, name: { $regex: search, $options: 'i' } }
+			: { '_createdBy._id': _id, isDeleted: false }
 		 const bundles = await Bundle.aggregate([
 				{ $match: searchFilter },
 				{ $sort: { name: 1 } }, // Sort the results by bundle name

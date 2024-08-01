@@ -7,9 +7,9 @@ export const deleteBundle = async (req: Request, res: Response) => {
 		const { _id } = req.user
 		const { bundleId } = req.query
 		if (!isValidObjectId(bundleId)) {
-			return res.status(400).json({ error: 'Invalid Product Id.' })
+			return res.status(400).json({ error: 'Invalid bundle Id.' })
 		}
-		const bundle = await Bundle.findOne({ _id: bundleId, _createdBy: _id })
+		const bundle = await Bundle.findOne({ _id: bundleId, '_createdBy._id': _id })
 		if (!bundle) {
 			return res.status(404).json({ error: 'bundle not found..' })
 		}

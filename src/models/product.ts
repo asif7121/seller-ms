@@ -8,9 +8,14 @@ interface IProduct extends Document {
 	discount?: number
 	stockAvailable: number
 	description: string
-	isActive: boolean
+	isDeleted: boolean
+	isBlocked: boolean
+	_blockedBy?: Schema.Types.ObjectId
 	_category: Schema.Types.ObjectId
-	_createdBy: Schema.Types.ObjectId
+	_createdBy: {
+		_id: Schema.Types.ObjectId
+		role: 'seller' | 'admin'
+	}
 }
 
 const productSchema: Schema = new Schema(
@@ -40,13 +45,29 @@ const productSchema: Schema = new Schema(
 			required: true,
 			default: 0,
 		},
-		isActive: {
+		isDeleted: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
-		_createdBy: {
+		isBlocked: {
+			type: Boolean,
+			default: false,
+		},
+		_blockedBy: {
 			type: Schema.Types.ObjectId,
-			ref: 'User',
+			default: undefined,
+		},
+
+		_createdBy: {
+			_id: {
+				type: Schema.Types.ObjectId,
+				required: true,
+			},
+			role: {
+				type: String,
+				enum: ['seller', 'admin'],
+				required: true,
+			},
 		},
 		_category: {
 			type: Schema.Types.ObjectId,
