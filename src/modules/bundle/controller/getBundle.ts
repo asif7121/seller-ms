@@ -8,14 +8,15 @@ export const getBundle = async (req: Request, res: Response) => {
 		const { bundleId }:any = req.query
 
 		if (!mongoose.isValidObjectId(bundleId)) {
-			return res.status(400).json({ error: 'Invalid bundle id' })
+			return res.status(400).json({ error: 'Invalid Bundle ObjectId' })
 		}
 
 		const bundle = await Bundle.aggregate([
 			{
 				$match: {
 					_id: new mongoose.Types.ObjectId(bundleId),
-					_createdBy: _id,
+					'_createdBy._id': _id,
+					isDeleted: false,
 				},
 			},
 			{
@@ -49,7 +50,7 @@ export const getBundle = async (req: Request, res: Response) => {
 		])
 
 		if (!bundle || bundle.length === 0) {
-			return res.status(400).json({ error: 'Invalid bundle id' })
+			return res.status(400).json({ error: 'No bundle found...' })
 		}
 		return res.status(200).json({ success: true, data: bundle[0] })
 	} catch (error) {
