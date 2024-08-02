@@ -9,7 +9,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
 		const limitNumber = parseInt(limit as string)
 
 		// Create the initial match filter
-		const matchFilter: any = { '_createdBy._id': _id, isDeleted: false }
+		const matchFilter: any = { '_createdBy._id': _id, isDeleted: false, isBlocked: false }
 		if (search) {
 			matchFilter.$or = [
 				{ name: { $regex: search, $options: 'i' } },
@@ -43,7 +43,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
 								name: 1,
 								price: 1,
 								mrp: 1,
-								discount:1,
+								discount: 1,
 								description: 1,
 								stockAvailable: 1,
 								category: '$category.name',

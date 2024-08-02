@@ -17,6 +17,7 @@ export const getBundle = async (req: Request, res: Response) => {
 					_id: new mongoose.Types.ObjectId(bundleId),
 					'_createdBy._id': _id,
 					isDeleted: false,
+					isBlocked: false,
 				},
 			},
 			{

@@ -9,8 +9,8 @@ const router = Router()
 router.post('/add', addProduct)
 router.get('/get-detail', getProduct)
 router.patch('/update', updateProduct)
-router.delete('/delete', deleteProduct)
+router.patch('/delete', deleteProduct)
 router.get('/all-products', getAllProduct)
 
 
-export const  productRoute = router
+export const  productRouter = router

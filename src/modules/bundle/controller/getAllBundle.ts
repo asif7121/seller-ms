@@ -8,8 +8,8 @@ export const getAllBundle = async (req: Request, res: Response) => {
 		const pageNumber = parseInt(page as string)
 		const limitNumber = parseInt(limit as string)
 		const searchFilter = search
-			? { '_createdBy._id': _id, isDeleted: false, name: { $regex: search, $options: 'i' } }
-			: { '_createdBy._id': _id, isDeleted: false }
+			? { '_createdBy._id': _id, isDeleted: false,isBlocked: false, name: { $regex: search, $options: 'i' } }
+			: { '_createdBy._id': _id, isDeleted: false, isBlocked: false }
 		 const bundles = await Bundle.aggregate([
 				{ $match: searchFilter },
 				{ $sort: { name: 1 } }, // Sort the results by bundle name

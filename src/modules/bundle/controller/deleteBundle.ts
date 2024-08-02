@@ -13,6 +13,16 @@ export const deleteBundle = async (req: Request, res: Response) => {
 		if (!bundle) {
 			return res.status(404).json({ error: 'bundle not found..' })
 		}
+		if (bundle.isBlocked) {
+			return res.status(400).json({
+				error: 'This bundle has been blocked.',
+			})
+		}
+		if (bundle.isDeleted) {
+			return res.status(400).json({
+				error: 'This bundle already has been deleted by the owner.',
+			})
+		}
 		bundle.isDeleted = true
 		await bundle.save()
 		return res

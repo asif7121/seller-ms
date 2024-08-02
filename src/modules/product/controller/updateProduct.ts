@@ -10,18 +10,28 @@ export const updateProduct = async (req: Request, res: Response) => {
 		if (!product) {
 			return res.status(400).json({ error: 'No product available..' })
 		}
+		if (product.isBlocked) {
+			return res.status(400).json({
+				error: 'This product has been blocked.',
+			})
+		}
+		if (product.isDeleted) {
+			return res.status(400).json({
+				error: 'This product has been deleted.',
+			})
+		}
 
 		if (name !== undefined) product.name = name
-		if (mrp !== undefined) product.mrp = mrp
-		if (discount !== undefined) product.discount = discount
 		if (description !== undefined) product.description = description
 
 		// Calculate the final price
 		if (mrp !== undefined) {
-			const finalPrice = discount ? mrp - (mrp * discount) / 100 : mrp
+			const finalPrice = product.discount ? mrp - (mrp * product.discount) / 100 : mrp
+			product.mrp = mrp
 			product.price = finalPrice
 		} else if (discount !== undefined) {
 			const finalPrice = product.mrp - (product.mrp * discount) / 100
+			product.discount = discount
 			product.price = finalPrice
 		}
 		await product.save()
