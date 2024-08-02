@@ -16,6 +16,7 @@ export const addBundle = async (req: Request, res: Response) => {
 			_id: { $in: productIds },
 			'_createdBy._id': _id,
 			isDeleted: false,
+			isBlocked:false,
 		})
 		// console.log(products)
 		if (products.length !== productsId.length) {

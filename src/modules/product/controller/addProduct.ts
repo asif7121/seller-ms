@@ -16,7 +16,7 @@ export const addProduct = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: error.details[0].message })
 		}
 		const category = await Category.findById(_category)
-		if (!category && category.isDeleted === true) {
+		if (!category || category.isDeleted === true) {
 			return res.status(400).json({ error: 'Invalid category' })
 		}
 		const finalPrice = discount ? mrp - (mrp * discount) / 100 : mrp

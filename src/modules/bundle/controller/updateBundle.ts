@@ -20,6 +20,11 @@ export const updateBundle = async (req: Request, res: Response) => {
 		if (bundle.isDeleted) {
 			return res.status(400).json({error:'this bundle has been deleted.'})
 		}
+		if (bundle.isBlocked) {
+			return res.status(400).json({
+				error: 'This bundle has been blocked.',
+			})
+		}
 		let totalPrice = 0
 
 		if (productsId) {

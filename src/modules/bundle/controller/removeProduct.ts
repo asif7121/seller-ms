@@ -20,6 +20,16 @@ export const removeProductFromBundle = async (req: Request, res: Response) => {
 			return res.status(400).json({
 				error: 'Invalid bundle ID or you do not have permission to access this bundle.',
 			})
+        }
+        if (bundle.isBlocked) {
+			return res.status(400).json({
+				error: 'This bundle has been blocked.',
+			})
+		}
+		if (bundle.isDeleted) {
+			return res.status(400).json({
+				error: 'This bundle has been deleted by the owner.',
+			})
 		}
 
 		// Check if the product exists in the bundle

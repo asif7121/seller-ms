@@ -17,6 +17,16 @@ export const deleteProduct = async (req: Request, res: Response) => {
 		if (!product) {
 			return res.status(404).json({ error: 'Product not found..' })
 		}
+		if (product.isBlocked) {
+			return res.status(400).json({
+				error: 'This product has been blocked.',
+			})
+		}
+		if (product.isDeleted) {
+			return res.status(400).json({
+				error: 'This product already has been deleted.',
+			})
+		}
 		product.isDeleted = true
 		await product.save()
 		return res
