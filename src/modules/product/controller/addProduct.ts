@@ -7,19 +7,23 @@ import { Request, Response } from 'express'
 
 
 
+
 export const addProduct = async (req: Request, res: Response) => {
 	try {
-		const { _id, role }= req.user
+		const { _id, role } = req.user
 		const { name, description, mrp, discount, _category, stockAvailable } = req.body
 		const { error } = productValidationSchema.validate(req.body)
 		if (error) {
 			return res.status(400).json({ error: error.details[0].message })
 		}
 		const category = await Category.findById(_category)
-		if (!category || category.isDeleted === true) {
+		if (!category) {
 			return res.status(400).json({ error: 'Invalid category' })
 		}
-		const finalPrice = discount ? mrp - (mrp * discount) / 100 : mrp
+		if (category.isDeleted) {
+			return res.status(400).json({ error: 'This category has been deleted.' })
+		}
+		const finalPrice = discount > 0 || discount <= 100 ? mrp - (mrp * discount) / 100 : mrp
 
 		const product = await Product.create({
 			name,
@@ -27,7 +31,7 @@ export const addProduct = async (req: Request, res: Response) => {
 			description,
 			mrp,
 			discount,
-			_category,
+			_category: category._id,
 			stockAvailable,
 			_createdBy: {
 				_id: _id,
