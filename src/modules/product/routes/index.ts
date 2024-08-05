@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { addProduct, deleteProduct, getAllProduct, getProduct, updateProduct } from "@modules/product/controller";
+import { addProduct, deleteProduct, getAllCategory, getAllProduct, getCategory, getProduct, updateProduct } from "@modules/product/controller";
 
 
 
@@ -11,6 +11,8 @@ router.get('/get-detail', getProduct)
 router.patch('/update', updateProduct)
 router.patch('/delete', deleteProduct)
 router.get('/all-products', getAllProduct)
+router.get('/category', getCategory)
+router.get('/all-category', getAllCategory)
 
 
 export const  productRouter = router

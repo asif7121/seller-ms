@@ -51,7 +51,7 @@ export const getBundle = async (req: Request, res: Response) => {
 		])
 
 		if (!bundle || bundle.length === 0) {
-			return res.status(400).json({ error: 'No bundle found...' })
+			return res.status(404).json({ error: 'No bundle found...' })
 		}
 		return res.status(200).json({ success: true, data: bundle[0] })
 	} catch (error) {
