@@ -6,10 +6,12 @@ interface IBundle extends Document {
 	discount?: number
 	isDeleted: boolean
 	isBlocked: boolean
+	platformDiscount?: number
+	discountedPrice?: number
 	_blockedBy: Schema.Types.ObjectId
 	_products: Schema.Types.ObjectId[]
 	_createdBy: {
-		_id: Schema.Types.ObjectId,
+		_id: Schema.Types.ObjectId
 		role: 'seller' | 'admin'
 	}
 }
@@ -32,7 +34,7 @@ const bundleSchema: Schema = new Schema(
 		],
 		discount: {
 			type: Number,
-			default: undefined
+			default: undefined,
 		},
 		isDeleted: {
 			type: Boolean,
@@ -42,9 +44,17 @@ const bundleSchema: Schema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		platformDiscount: {
+			type: Number,
+			default: undefined,
+		},
+		discountedPrice: {
+			type: Number,
+			default: undefined,
+		},
 		_blockedBy: {
 			type: Schema.Types.ObjectId,
-			default: undefined
+			default: undefined,
 		},
 
 		_createdBy: {
@@ -53,8 +63,8 @@ const bundleSchema: Schema = new Schema(
 			},
 			role: {
 				type: String,
-				enum:['seller', 'admin']
-			}
+				enum: ['seller', 'admin'],
+			},
 		},
 	},
 	{ timestamps: true, versionKey: false }

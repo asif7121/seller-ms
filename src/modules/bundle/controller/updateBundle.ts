@@ -29,30 +29,37 @@ export const updateBundle = async (req: Request, res: Response) => {
 
 		if (productsId) {
 			// Validate that productsId is an array of valid ObjectId strings
-			if (
-				!Array.isArray(productsId) ||
-				productsId.some((id) => !isValidObjectId(id))
-			) {
+			if (!Array.isArray(productsId) || productsId.some((id) => !isValidObjectId(id))) {
 				return res.status(400).json({ error: 'Invalid product IDs provided' })
 			}
 
 			// Remove duplicate IDs
 			const uniqueProductIds = [...new Set(productsId)]
+			// Filter out product IDs that are already had been added to this bundle
+			const newProductIds = uniqueProductIds.filter(
+				(id) => !bundle._products.map((pId) => pId.toString()).includes(id)
+			)
+
+			if (newProductIds.length === 0) {
+				return res
+					.status(400)
+					.json({ error: 'All provided products already had been added to this bundle.' })
+			}
 
 			// Find products by their _id and _createdBy._id
 			const products = await Product.find({
-				_id: { $in: uniqueProductIds },
+				_id: { $in: newProductIds },
 				'_createdBy._id': _id,
 				isDeleted: false,
-				isBlocked:false,
+				isBlocked: false,
 			})
 
-			if (products.length !== uniqueProductIds.length) {
+			if (products.length !== newProductIds.length) {
 				return res.status(404).json({ error: 'Some products not found' })
 			}
 
 			// Combine existing product IDs with the new ones
-			const combinedProductIds = [...bundle._products, ...uniqueProductIds]
+			const combinedProductIds = [...bundle._products, ...newProductIds]
 
 			// Find all products including the existing ones
 			const allProducts = await Product.find({

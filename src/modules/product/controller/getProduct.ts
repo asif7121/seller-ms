@@ -16,7 +16,7 @@ export const getProduct = async (req: Request, res: Response) => {
 					_id: new mongoose.Types.ObjectId(productId),
 					'_createdBy._id': _id,
 					isDeleted: false,
-					isBlocked: false
+					isBlocked: false,
 				},
 			},
 			{
@@ -34,10 +34,24 @@ export const getProduct = async (req: Request, res: Response) => {
 					name: 1,
 					price: 1,
 					mrp: 1,
-					discount:1,
+					discount: 1,
 					description: 1,
 					stockAvailable: 1,
 					category: '$category.name',
+					platformDiscount: {
+						$cond: {
+							if: { $gt: ['$platformDiscount', null] },
+							then: '$platformDiscount',
+							else: '$$REMOVE',
+						},
+					},
+					discountedPrice: {
+						$cond: {
+							if: { $gt: ['$discountedPrice', null] },
+							then: '$discountedPrice',
+							else: '$$REMOVE',
+						},
+					},
 				},
 			},
 		])
