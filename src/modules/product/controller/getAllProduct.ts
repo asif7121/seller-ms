@@ -48,6 +48,20 @@ export const getAllProduct = async (req: Request, res: Response) => {
 								description: 1,
 								stockAvailable: 1,
 								category: '$category.name',
+								platformDiscount: {
+									$cond: {
+										if: { $gt: ['$platformDiscount', null] },
+										then: '$platformDiscount',
+										else: '$$REMOVE',
+									},
+								},
+								discountedPrice: {
+									$cond: {
+										if: { $gt: ['$discountedPrice', null] },
+										then: '$discountedPrice',
+										else: '$$REMOVE',
+									},
+								},
 							},
 						},
 					],
