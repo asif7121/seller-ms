@@ -42,19 +42,20 @@ export const removeProductFromBundle = async (req: Request, res: Response) => {
 		}
 
 		// Remove the product from the bundle
-		_.pullAt(bundle._products, productIndex)
+		bundle._products = bundle._products.filter((id) => id.toString() !== productId)
+
 
 		// Recalculate the total price
 		const remainingProducts = await Product.find({_id: { $in: bundle._products }})
         
 		const totalPrice = _.sumBy(remainingProducts, 'price')
-
+		const totalMrp = _.sumBy(remainingProducts, 'mrp')
 		// Apply the discount if it exists
 		const finalPrice = bundle.discount
-			? totalPrice - (totalPrice * bundle.discount) / 100
+			? totalMrp - (totalMrp * bundle.discount) / 100
 			: totalPrice
 		bundle.price = finalPrice
-
+		bundle.mrp = totalMrp
 		// Save the updated bundle
 		await bundle.save()
 
