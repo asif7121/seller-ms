@@ -14,7 +14,7 @@ export const updateBundle = async (req: Request, res: Response) => {
 			return res.status(400).json({ error: 'Invalid bundle Id.' })
 		}
 
-		const bundle = await Bundle.findOne({ _id: bundleId, '_createdBy._id': _id })
+		const bundle = await Bundle.findOne({ _id: bundleId, _createdBy: _id })
 		if (!bundle) {
 			return res.status(400).json({ error: 'No bundle found.' })
 		}
@@ -50,7 +50,7 @@ export const updateBundle = async (req: Request, res: Response) => {
 			// Find products by their _id and _createdBy._id
 			const products = await Product.find({
 				_id: { $in: newProductIds },
-				'_createdBy._id': _id,
+				_createdBy: _id,
 				isDeleted: false,
 				isBlocked: false,
 			})
@@ -65,7 +65,7 @@ export const updateBundle = async (req: Request, res: Response) => {
 			// Find all products including the existing ones
 			const allProducts = await Product.find({
 				_id: { $in: combinedProductIds },
-				'_createdBy._id': _id,
+				_createdBy: _id,
 			})
 
 			// Calculate the total price of all products
@@ -76,7 +76,7 @@ export const updateBundle = async (req: Request, res: Response) => {
 			// Calculate the total price of the existing products
 			const existingProducts = await Product.find({
 				_id: { $in: bundle._products },
-				'_createdBy._id': _id,
+				_createdBy: _id,
 			})
 			totalPrice = existingProducts.reduce((sum, product) => sum + product.price, 0)
 			totalMrp = _.sumBy(existingProducts,'mrp')

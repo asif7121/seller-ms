@@ -15,7 +15,7 @@ export const removeProductFromBundle = async (req: Request, res: Response) => {
 		}
 
 		// Find the bundle
-		const bundle = await Bundle.findOne({ _id: bundleId, '_createdBy._id': _id })
+		const bundle = await Bundle.findOne({ _id: bundleId, _createdBy: _id })
 		if (!bundle) {
 			return res.status(400).json({
 				error: 'Invalid bundle ID or you do not have permission to access this bundle.',

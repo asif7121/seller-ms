@@ -14,7 +14,7 @@ export const getProduct = async (req: Request, res: Response) => {
 			{
 				$match: {
 					_id: new mongoose.Types.ObjectId(productId),
-					'_createdBy._id': _id,
+					_createdBy: _id,
 					isDeleted: false,
 					isBlocked: false,
 				},

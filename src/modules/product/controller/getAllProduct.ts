@@ -9,7 +9,7 @@ export const getAllProduct = async (req: Request, res: Response) => {
 		const limitNumber = parseInt(limit as string)
 
 		// Create the initial match filter
-		const matchFilter: any = { '_createdBy._id': _id, isDeleted: false, isBlocked: false }
+		const matchFilter: any = { _createdBy: _id, isDeleted: false, isBlocked: false }
 		if (search) {
 			matchFilter.$or = [
 				{ name: { $regex: search, $options: 'i' } },

@@ -23,7 +23,7 @@ export const addBundle = async (req: Request, res: Response) => {
 		// Find products by their _id
 		const products = await Product.find({
 			_id: { $in: productIds },
-			'_createdBy._id': _id,
+			_createdBy: _id,
 			isDeleted: false,
 			isBlocked: false,
 		})
@@ -52,10 +52,7 @@ export const addBundle = async (req: Request, res: Response) => {
 			mrp: totalMrp,
 			_products: productIds,
 			discount,
-			_createdBy: {
-				_id: _id,
-				role: role,
-			},
+			_createdBy: _id
 		})
 
 		return res.status(201).json({ success: true, data: bundle })

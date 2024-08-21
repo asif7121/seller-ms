@@ -6,7 +6,7 @@ export const updateProduct = async (req: Request, res: Response) => {
 		const { _id } = req.user
 		const { productId } = req.query
 		const { name, mrp, discount, description } = req.body
-		const product = await Product.findOne({ _id: productId, '_createdBy._id': _id })
+		const product = await Product.findOne({ _id: productId, _createdBy: _id })
 		if (!product) {
 			return res.status(400).json({ error: 'No product available..' })
 		}

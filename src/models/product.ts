@@ -9,16 +9,15 @@ interface IProduct extends Document {
 	description: string
 	isDeleted: boolean
 	isBlocked: boolean
+	isInSale: boolean
 	platformDiscount?: number
 	_blockedBy?: Schema.Types.ObjectId
 	_category: Schema.Types.ObjectId
-	_createdBy: {
-		_id: Schema.Types.ObjectId
-		role: 'seller' | 'admin'
-	}
+	_createdBy: Schema.Types.ObjectId
+		
 }
 
-const productSchema: Schema = new Schema(
+const productSchema: Schema = new Schema<IProduct>(
 	{
 		name: {
 			type: String,
@@ -57,21 +56,18 @@ const productSchema: Schema = new Schema(
 			type: Boolean,
 			default: false,
 		},
+		isInSale: {
+			type: Boolean,
+			default: false,
+		},
 		_blockedBy: {
 			type: Schema.Types.ObjectId,
 			default: undefined,
 		},
 
 		_createdBy: {
-			_id: {
-				type: Schema.Types.ObjectId,
-				required: true,
-			},
-			role: {
-				type: String,
-				enum: ['seller', 'admin'],
-				required: true,
-			},
+			type: Schema.Types.ObjectId,
+			required: true,
 		},
 		_category: {
 			type: Schema.Types.ObjectId,

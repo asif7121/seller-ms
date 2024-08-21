@@ -10,7 +10,7 @@ import { Request, Response } from 'express'
 
 export const addProduct = async (req: Request, res: Response) => {
 	try {
-		const { _id, role } = req.user
+		const { _id } = req.user
 		const { name, description, mrp, discount, _category, stockAvailable } = req.body
 		const { error } = productValidationSchema.validate(req.body)
 		if (error) {
@@ -33,10 +33,7 @@ export const addProduct = async (req: Request, res: Response) => {
 			discount,
 			_category: category._id,
 			stockAvailable,
-			_createdBy: {
-				_id: _id,
-				role: role
-			},
+			_createdBy: _id,
 		})
 		return res.status(201).json({ success: true, data: product })
 	} catch (error) {
