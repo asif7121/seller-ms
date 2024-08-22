@@ -1,19 +1,22 @@
-import { Product } from '@models/product'
-import { Request, Response } from 'express'
+import { Product } from "@models/product";
+import { Request, Response } from "express";
 
-export const getAllProduct = async (req: Request, res: Response) => {
-	try {
+
+
+
+
+
+export const getSaleProducts = async (req: Request, res: Response) => {
+    try {
 		const { _id } = req.user
-		const { page = 1, limit = 10, search , category} = req.query
+		const { page = 1, limit = 10, search, category } = req.query
 		const pageNumber = parseInt(page as string)
 		const limitNumber = parseInt(limit as string)
 
 		// Create the initial match filter
-		const matchFilter: any = { _createdBy: _id, isDeleted: false, isBlocked: false }
+		const matchFilter: any = { _createdBy: _id, isDeleted: false, isBlocked: false, isInSale: true }
 		if (search) {
-			matchFilter.$or = [
-				{ name: { $regex: search, $options: 'i' } },
-			]
+			matchFilter.$or = [{ name: { $regex: search, $options: 'i' } }]
 		}
 		if (category) {
 			matchFilter['category.name'] = { $regex: category, $options: 'i' }
@@ -47,7 +50,8 @@ export const getAllProduct = async (req: Request, res: Response) => {
 								discount: 1,
 								description: 1,
 								stockAvailable: 1,
-								category: '$category.name',
+                                category: '$category.name',
+                                isInSale: 1,
 								platformDiscount: {
 									$cond: {
 										if: { $gt: ['$platformDiscount', null] },

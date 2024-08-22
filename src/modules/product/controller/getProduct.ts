@@ -6,18 +6,18 @@ export const getProduct = async (req: Request, res: Response) => {
 	try {
 		const { _id } = req.user
 		const { productId }: any = req.query
-		if (!isValidObjectId(productId)) {
+		if (!productId || !isValidObjectId(productId)) {
 			return res.status(400).json({ error: 'Invalid Product ID' })
 		}
-
+		const match = {
+			_id: productId,
+			_createdBy: _id,
+			isDeleted: false,
+			isBlocked: false,
+		}
 		const product = await Product.aggregate([
 			{
-				$match: {
-					_id: new mongoose.Types.ObjectId(productId),
-					_createdBy: _id,
-					isDeleted: false,
-					isBlocked: false,
-				},
+				$match: match,
 			},
 			{
 				$lookup: {
@@ -42,13 +42,6 @@ export const getProduct = async (req: Request, res: Response) => {
 						$cond: {
 							if: { $gt: ['$platformDiscount', null] },
 							then: '$platformDiscount',
-							else: '$$REMOVE',
-						},
-					},
-					discountedPrice: {
-						$cond: {
-							if: { $gt: ['$discountedPrice', null] },
-							then: '$discountedPrice',
 							else: '$$REMOVE',
 						},
 					},
